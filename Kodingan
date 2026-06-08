@@ -1,0 +1,349 @@
+package main
+
+import "fmt"
+
+const NMAX int = 100
+
+type pemilik struct {
+	Nama_Pemilik string
+	Nomor_hp     string
+	Alamat       string
+}
+type kendaraan struct {
+	Plat_nomor     string
+	Merk_kendaraan string
+	Tipe_kendaraan string
+	Tahun_Produksi int
+}
+type Riwayat_servis struct {
+	Tahun   int
+	bulan   int
+	tanggal int
+	jenis   string
+	detail  string
+}
+
+type Tab_pemilik [NMAX]pemilik
+type Tab_kendaraan [NMAX]kendaraan
+type Tab_Riwayat_servis [NMAX]Riwayat_servis
+
+func main() {
+	var dataPemilik Tab_pemilik
+	var dataKendaraan Tab_kendaraan
+	var dataService Tab_Riwayat_servis
+	var i int
+	var pilihan int
+
+	for {
+		fmt.Println("==== ZAIDAN AND MAGALIH OTOMOTIF ====")
+		fmt.Println("Silahkan pilih layanan yang diinginkan")
+		fmt.Println("1.		Input Data")
+		fmt.Println("2.		Tampilkan Data")
+		fmt.Println("3.		Ubah Data")
+		fmt.Println("4.		Hapus Data")
+		fmt.Println("5.		Tambah Riwayat Servis")
+		fmt.Println("6.		Sequential Search Plat Nomor")
+		fmt.Println("7.		Binary Search Plat Nomor")
+		fmt.Println("8.		Selection Sort Tahun Produksi")
+		fmt.Println("9.		Insertion Sort Tanggal Servis")
+		fmt.Println("10.		Statistik Servis")
+		fmt.Println("0.		Keluar")
+		fmt.Print("Pilihan: ")
+		fmt.Scan(&pilihan)
+
+		if pilihan == 1 {
+			inputData(&dataPemilik, &dataKendaraan, &dataService, &i)
+		} else if pilihan == 2 {
+			tampilData(dataPemilik, dataKendaraan, dataService, i)
+		} else if pilihan == 3 {
+			ubahData(&dataPemilik, &dataKendaraan, &dataService, i)
+		} else if pilihan == 4 {
+			hapusData(&dataPemilik, &dataKendaraan, &dataService, &i)
+		} else if pilihan == 5 {
+			tambahRiwayatServis(&dataService, dataKendaraan, i)
+		} else if pilihan == 6 {
+			sequentialSearch(dataKendaraan, i)
+		} else if pilihan == 7 {
+			binarySearch(dataKendaraan, i)
+		} else if pilihan == 8 {
+			selectionSort(&dataKendaraan, &dataPemilik, &dataService, i)
+		} else if pilihan == 9 {
+			insertionSort(&dataKendaraan, &dataPemilik, &dataService, i)
+		} else if pilihan == 10 {
+			statistikServis(dataService, i)
+		} else if pilihan == 0 {
+			fmt.Println("Terima kasih telah menggunakan JIBUNG DAN LER OTOMOTIF!")
+			return
+		} else {
+			fmt.Println("Pilihan tidak valid!")
+		}
+	}
+}
+
+func inputData(dataPemilik *Tab_pemilik, dataKendaraan *Tab_kendaraan, dataService *Tab_Riwayat_servis, i *int) {
+	fmt.Println("Jika ingin berhenti ketik STOP(Gunakan Underscore sebagai pengganti spasi)")
+	fmt.Println("Nama Pemilik   : ")
+	fmt.Scan(&(*dataPemilik)[*i].Nama_Pemilik)
+
+	for (*dataPemilik)[*i].Nama_Pemilik != "STOP" {
+		fmt.Println("Nomor HP       : ")
+		fmt.Scan(&(*dataPemilik)[*i].Nomor_hp)
+		fmt.Println("Alamat         : ")
+		fmt.Scan(&(*dataPemilik)[*i].Alamat)
+		fmt.Println("Plat Nomor     : ")
+		fmt.Scan(&(*dataKendaraan)[*i].Plat_nomor)
+		fmt.Println("Merk Kendaraan : ")
+		fmt.Scan(&(*dataKendaraan)[*i].Merk_kendaraan)
+		fmt.Println("Tipe Kendaraan : ")
+		fmt.Scan(&(*dataKendaraan)[*i].Tipe_kendaraan)
+		fmt.Println("Tahun Produksi : ")
+		fmt.Scan(&(*dataKendaraan)[*i].Tahun_Produksi)
+		fmt.Println("Tahun Servis   : ")
+		fmt.Scan(&(*dataService)[*i].Tahun)
+		fmt.Println("Bulan Servis   : ")
+		fmt.Scan(&(*dataService)[*i].bulan)
+		fmt.Print("Tanggal Servis : ")
+		fmt.Scan(&(*dataService)[*i].tanggal)
+		fmt.Println("Jenis Servis   : ")
+		fmt.Scan(&(*dataService)[*i].jenis)
+		fmt.Println("Detail Servis  : ")
+		fmt.Scan(&(*dataService)[*i].detail)
+		*i++
+		fmt.Println("Nama Pemilik   : ")
+		fmt.Scan(&(*dataPemilik)[*i].Nama_Pemilik)
+	}
+}
+
+func tampilData(dataPemilik Tab_pemilik, dataKendaraan Tab_kendaraan, dataService Tab_Riwayat_servis, i int) {
+	var j int
+	for j = 0; j < i; j++ {
+		fmt.Println("==========================")
+		fmt.Println("Data ke-", j+1)
+		fmt.Println("Nama Pemilik   :", dataPemilik[j].Nama_Pemilik)
+		fmt.Println("Nomor HP       :", dataPemilik[j].Nomor_hp)
+		fmt.Println("Alamat         :", dataPemilik[j].Alamat)
+		fmt.Println("Plat Nomor     :", dataKendaraan[j].Plat_nomor)
+		fmt.Println("Merk Kendaraan :", dataKendaraan[j].Merk_kendaraan)
+		fmt.Println("Tipe Kendaraan :", dataKendaraan[j].Tipe_kendaraan)
+		fmt.Println("Tahun Produksi :", dataKendaraan[j].Tahun_Produksi)
+		fmt.Println("Tahun Servis   :", dataService[j].Tahun)
+		fmt.Println("Bulan Servis   :", dataService[j].bulan)
+		fmt.Println("Tanggal Servis :", dataService[j].tanggal)
+		fmt.Println("Jenis Servis   :", dataService[j].jenis)
+		fmt.Println("Detail Servis  :", dataService[j].detail)
+	}
+}
+
+func ubahData(dataPemilik *Tab_pemilik, dataKendaraan *Tab_kendaraan, dataService *Tab_Riwayat_servis, i int) {
+	var plat string
+	fmt.Print("Masukkan Plat Nomor yang ingin diubah: ")
+	fmt.Scan(&plat)
+
+	var j int
+	for j = 0; j < i; j++ {
+		if (*dataKendaraan)[j].Plat_nomor == plat {
+			fmt.Println("Data ditemukan, masukkan data baru:")
+			fmt.Println("Nama Pemilik   : ")
+			fmt.Scan(&(*dataPemilik)[j].Nama_Pemilik)
+			fmt.Println("Nomor HP       : ")
+			fmt.Scan(&(*dataPemilik)[j].Nomor_hp)
+			fmt.Println("Alamat         : ")
+			fmt.Scan(&(*dataPemilik)[j].Alamat)
+			fmt.Println("Plat Nomor     : ")
+			fmt.Scan(&(*dataKendaraan)[j].Plat_nomor)
+			fmt.Println("Merk Kendaraan : ")
+			fmt.Scan(&(*dataKendaraan)[j].Merk_kendaraan)
+			fmt.Println("Tipe Kendaraan : ")
+			fmt.Scan(&(*dataKendaraan)[j].Tipe_kendaraan)
+			fmt.Println("Tahun Produksi : ")
+			fmt.Scan(&(*dataKendaraan)[j].Tahun_Produksi)
+			fmt.Println("Tahun Servis   : ")
+			fmt.Scan(&(*dataService)[j].Tahun)
+			fmt.Println("Bulan Servis   : ")
+			fmt.Scan(&(*dataService)[j].bulan)
+			fmt.Println("Tanggal Servis : ")
+			fmt.Scan(&(*dataService)[j].tanggal)
+			fmt.Println("Jenis Servis   : ")
+			fmt.Scan(&(*dataService)[j].jenis)
+			fmt.Println("Detail Servis  : ")
+			fmt.Scan(&(*dataService)[j].detail)
+			fmt.Println("Data berhasil diubah!")
+			return
+		}
+	}
+	fmt.Println("Data tidak ditemukan!")
+}
+
+func hapusData(dataPemilik *Tab_pemilik, dataKendaraan *Tab_kendaraan, dataService *Tab_Riwayat_servis, i *int) {
+	var plat string
+	fmt.Print("Masukkan Plat Nomor yang ingin dihapus: ")
+	fmt.Scan(&plat)
+
+	var j int
+	for j = 0; j < *i; j++ {
+		if (*dataKendaraan)[j].Plat_nomor == plat {
+			var k int
+			for k = j; k < *i-1; k++ {
+				(*dataPemilik)[k] = (*dataPemilik)[k+1]
+				(*dataKendaraan)[k] = (*dataKendaraan)[k+1]
+				(*dataService)[k] = (*dataService)[k+1]
+			}
+			*i--
+			fmt.Println("Data berhasil dihapus!")
+			return
+		}
+	}
+	fmt.Println("Data tidak ditemukan!")
+}
+
+func tambahRiwayatServis(dataService *Tab_Riwayat_servis, dataKendaraan Tab_kendaraan, i int) {
+	var plat string
+	fmt.Print("Masukkan Plat Nomor: ")
+	fmt.Scan(&plat)
+
+	var j int
+	for j = 0; j < i; j++ {
+		if dataKendaraan[j].Plat_nomor == plat {
+			fmt.Println("Kendaraan ditemukan, masukkan riwayat servis baru:")
+			fmt.Print("Tahun Servis   : ")
+			fmt.Scan(&(*dataService)[j].Tahun)
+			fmt.Print("Bulan Servis   : ")
+			fmt.Scan(&(*dataService)[j].bulan)
+			fmt.Print("Tanggal Servis : ")
+			fmt.Scan(&(*dataService)[j].tanggal)
+			fmt.Print("Jenis Servis   : ")
+			fmt.Scan(&(*dataService)[j].jenis)
+			fmt.Print("Detail Servis  : ")
+			fmt.Scan(&(*dataService)[j].detail)
+			fmt.Println("Riwayat servis berhasil ditambahkan!")
+			return
+		}
+	}
+	fmt.Println("Kendaraan tidak ditemukan!")
+}
+
+func sequentialSearch(dataKendaraan Tab_kendaraan, i int) {
+	var plat string
+	fmt.Print("Masukkan Plat Nomor yang dicari: ")
+	fmt.Scan(&plat)
+
+	var j int
+	for j = 0; j < i; j++ {
+		if dataKendaraan[j].Plat_nomor == plat {
+			fmt.Println("Data ditemukan di index", j)
+			fmt.Println("Plat Nomor     :", dataKendaraan[j].Plat_nomor)
+			fmt.Println("Merk Kendaraan :", dataKendaraan[j].Merk_kendaraan)
+			fmt.Println("Tipe Kendaraan :", dataKendaraan[j].Tipe_kendaraan)
+			fmt.Println("Tahun Produksi :", dataKendaraan[j].Tahun_Produksi)
+			return
+		}
+	}
+	fmt.Println("Data tidak ditemukan!")
+}
+
+func binarySearch(dataKendaraan Tab_kendaraan, i int) {
+	var plat string
+	fmt.Print("Masukkan Plat Nomor yang dicari: ")
+	fmt.Scan(&plat)
+
+	kiri := 0
+	kanan := i - 1
+	for kiri <= kanan {
+		tengah := (kiri + kanan) / 2
+		if dataKendaraan[tengah].Plat_nomor == plat {
+			fmt.Println("Data ditemukan di index", tengah)
+			fmt.Println("Plat Nomor     :", dataKendaraan[tengah].Plat_nomor)
+			fmt.Println("Merk Kendaraan :", dataKendaraan[tengah].Merk_kendaraan)
+			fmt.Println("Tipe Kendaraan :", dataKendaraan[tengah].Tipe_kendaraan)
+			fmt.Println("Tahun Produksi :", dataKendaraan[tengah].Tahun_Produksi)
+			return
+		} else if dataKendaraan[tengah].Plat_nomor < plat {
+			kiri = tengah + 1
+		} else {
+			kanan = tengah - 1
+		}
+	}
+	fmt.Println("Data tidak ditemukan!")
+}
+
+func selectionSort(dataKendaraan *Tab_kendaraan, dataPemilik *Tab_pemilik, dataService *Tab_Riwayat_servis, i int) {
+	var j, k int
+	for j = 0; j < i-1; j++ {
+		idxMin := j
+		for k = j + 1; k < i; k++ {
+			if (*dataKendaraan)[k].Tahun_Produksi < (*dataKendaraan)[idxMin].Tahun_Produksi {
+				idxMin = k
+			}
+		}
+		(*dataKendaraan)[j], (*dataKendaraan)[idxMin] = (*dataKendaraan)[idxMin], (*dataKendaraan)[j]
+		(*dataPemilik)[j], (*dataPemilik)[idxMin] = (*dataPemilik)[idxMin], (*dataPemilik)[j]
+		(*dataService)[j], (*dataService)[idxMin] = (*dataService)[idxMin], (*dataService)[j]
+	}
+	fmt.Println("Data berhasil diurutkan berdasarkan Tahun Produksi!")
+}
+
+func insertionSort(dataKendaraan *Tab_kendaraan, dataPemilik *Tab_pemilik, dataService *Tab_Riwayat_servis, i int) {
+	var j int
+	for j = 1; j < i; j++ {
+		kunciKendaraan := (*dataKendaraan)[j]
+		kunciPemilik := (*dataPemilik)[j]
+		kunciService := (*dataService)[j]
+		k := j - 1
+		for k >= 0 && (*dataService)[k].Tahun > kunciService.Tahun {
+			(*dataKendaraan)[k+1] = (*dataKendaraan)[k]
+			(*dataPemilik)[k+1] = (*dataPemilik)[k]
+			(*dataService)[k+1] = (*dataService)[k]
+			k--
+		}
+		(*dataKendaraan)[k+1] = kunciKendaraan
+		(*dataPemilik)[k+1] = kunciPemilik
+		(*dataService)[k+1] = kunciService
+	}
+	fmt.Println("Data berhasil diurutkan berdasarkan Tahun Servis!")
+}
+
+func statistikServis(dataService Tab_Riwayat_servis, i int) {
+	fmt.Println("=== STATISTIK SERVIS ===")
+
+	var jenisCount [NMAX]string
+	var count [NMAX]int
+	nJenis := 0
+
+	var j int
+	for j = 0; j < i; j++ {
+		found := false
+		var k int
+		for k = 0; k < nJenis; k++ {
+			if jenisCount[k] == dataService[j].jenis {
+				count[k]++
+				found = true
+				break
+			}
+		}
+		if !found {
+			jenisCount[nJenis] = dataService[j].jenis
+			count[nJenis] = 1
+			nJenis++
+		}
+	}
+
+	fmt.Println("Kategori Kerusakan:")
+	for j = 0; j < nJenis; j++ {
+		fmt.Println(jenisCount[j], ":", count[j], "kali")
+	}
+
+	var bulanCount [13]int
+	for j = 0; j < i; j++ {
+		if dataService[j].bulan >= 1 && dataService[j].bulan <= 12 {
+			bulanCount[dataService[j].bulan]++
+		}
+	}
+
+	fmt.Println("Jumlah Servis per Bulan:")
+	namaBulan := []string{"", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"}
+	for j = 1; j <= 12; j++ {
+		if bulanCount[j] > 0 {
+			fmt.Println(namaBulan[j], ":", bulanCount[j], "kendaraan")
+		}
+	}
+}
